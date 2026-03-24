@@ -7,311 +7,350 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #0f0f0f; color: #e8e8e8; font-family: 'DM Sans', sans-serif; min-height: 100vh; }
-.container { max-width: 580px; margin: 0 auto; padding: 32px 24px; }
-.container.wizard { padding-bottom: 140px; }
-h1.gold { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 800; background: linear-gradient(135deg, #e8a838, #f0c060, #e8a838); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; line-height: 1.2; }
-h2.section-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; color: #f0f0f0; }
-.subtitle { color: #888; font-size: 15px; max-width: 420px; margin: 0 auto; line-height: 1.6; }
-.progress-wrap { width: 100%; background: rgba(255,255,255,0.08); border-radius: 99px; height: 6px; overflow: hidden; }
-.progress-bar { height: 100%; background: linear-gradient(90deg, #e8a838, #f0c060); border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
-.question-label { display: block; font-size: 15px; font-weight: 600; color: #ddd; margin-bottom: 10px; line-height: 1.4; }
-.scale-row { display: flex; gap: 6px; width: 100%; }
-.scale-btn { flex: 1; padding: 14px 4px 10px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; }
-.scale-btn .num { font-size: 22px; font-weight: 800; color: #555; font-family: 'DM Sans', sans-serif; }
-.scale-btn .lbl { font-size: 10px; color: #666; font-family: 'DM Sans', sans-serif; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-.select-btn { display: block; width: 100%; padding: 12px 18px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #ccc; cursor: pointer; text-align: left; font-size: 15px; font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-bottom: 8px; }
-.select-btn.active { border: 2px solid #e8a838; background: rgba(232,168,56,0.15); color: #f0c060; }
-textarea.answer { width: 100%; padding: 16px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #e0e0e0; font-size: 15px; font-family: 'DM Sans', sans-serif; resize: vertical; outline: none; }
-textarea.answer:focus { border-color: #e8a838; }
-input.name-input { width: 100%; padding: 16px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #e0e0e0; font-size: 16px; font-family: 'DM Sans', sans-serif; outline: none; }
-input.name-input:focus { border-color: #e8a838; }
-.nav-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 16px 24px; background: linear-gradient(transparent, #0f0f0f 30%); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
-.btn-back { padding: 14px 28px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: #ccc; cursor: pointer; font-size: 15px; font-weight: 600; font-family: 'DM Sans', sans-serif; }
-.btn-next { padding: 14px 32px; border-radius: 12px; border: none; background: linear-gradient(135deg, #e8a838, #d4922e); color: #fff; cursor: pointer; font-size: 15px; font-weight: 700; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 20px rgba(232,168,56,0.25); }
-.btn-send { padding: 14px 32px; border-radius: 12px; border: none; background: linear-gradient(135deg, #4caf50, #388e3c); color: #fff; cursor: pointer; font-size: 15px; font-weight: 700; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 20px rgba(76,175,80,0.3); }
-.btn-start { width: 100%; padding: 16px 32px; border-radius: 14px; border: none; background: linear-gradient(135deg, #e8a838, #d4922e); color: #0f0f0f; cursor: pointer; font-size: 16px; font-weight: 700; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 24px rgba(232,168,56,0.3); }
-.tag { padding: 8px 14px; border-radius: 99px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #999; font-size: 13px; display: inline-block; margin: 0 4px 8px 0; }
-.fade-in { animation: fadeUp 0.35s ease forwards; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-.error-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(239,83,80,0.9); color: #fff; padding: 12px 24px; border-radius: 12px; font-size: 14px; z-index: 200; display: none; }
-.thank-you { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 32px; }
-.hidden { display: none; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f0f;color:#e8e8e8;font-family:'DM Sans',sans-serif;min-height:100vh}
+.ctn{max-width:580px;margin:0 auto;padding:32px 24px}.ctn.wiz{padding-bottom:140px}
+h1.gold{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;background:linear-gradient(135deg,#e8a838,#f0c060,#e8a838);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px;line-height:1.2}
+h2.stitle{font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:#f0f0f0}
+.sub{color:#888;font-size:15px;max-width:420px;margin:0 auto;line-height:1.6}
+.pbar-w{width:100%;background:rgba(255,255,255,.08);border-radius:99px;height:6px;overflow:hidden}
+.pbar{height:100%;background:linear-gradient(90deg,#e8a838,#f0c060);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.qlbl{display:block;font-size:15px;font-weight:600;color:#ddd;margin-bottom:10px;line-height:1.4}
+.sr{display:flex;gap:6px;width:100%}
+.sb{flex:1;padding:14px 4px 10px;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .2s}
+.sb .n{font-size:22px;font-weight:800;color:#555;font-family:'DM Sans',sans-serif}
+.sb .l{font-size:10px;color:#666;font-family:'DM Sans',sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.selbtn{display:block;width:100%;padding:12px 18px;border-radius:12px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#ccc;cursor:pointer;text-align:left;font-size:15px;font-family:'DM Sans',sans-serif;transition:all .2s;margin-bottom:8px}
+.selbtn.a{border:2px solid #e8a838;background:rgba(232,168,56,.15);color:#f0c060}
+textarea.ans{width:100%;padding:16px;border-radius:12px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#e0e0e0;font-size:15px;font-family:'DM Sans',sans-serif;resize:vertical;outline:none}
+textarea.ans:focus{border-color:#e8a838}
+textarea.cmt{width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(232,168,56,.2);background:rgba(232,168,56,.04);color:#e0d0b0;font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;outline:none;margin-top:8px}
+textarea.cmt:focus{border-color:#e8a838}
+.cmt-toggle{color:#e8a838;font-size:12px;cursor:pointer;margin-top:6px;display:inline-block;opacity:.7;transition:opacity .2s}
+.cmt-toggle:hover{opacity:1}
+input.ni{width:100%;padding:16px;border-radius:12px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#e0e0e0;font-size:16px;font-family:'DM Sans',sans-serif;outline:none}
+input.ni:focus{border-color:#e8a838}
+.nav{position:fixed;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent,#0f0f0f 30%);display:flex;justify-content:space-between;align-items:center;z-index:100}
+.bbk{padding:14px 28px;border-radius:12px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#ccc;cursor:pointer;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif}
+.bnx{padding:14px 32px;border-radius:12px;border:none;background:linear-gradient(135deg,#e8a838,#d4922e);color:#fff;cursor:pointer;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 4px 20px rgba(232,168,56,.25)}
+.bsn{padding:14px 32px;border-radius:12px;border:none;background:linear-gradient(135deg,#4caf50,#388e3c);color:#fff;cursor:pointer;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 4px 20px rgba(76,175,80,.3)}
+.bst{width:100%;padding:16px 32px;border-radius:14px;border:none;background:linear-gradient(135deg,#e8a838,#d4922e);color:#0f0f0f;cursor:pointer;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 4px 24px rgba(232,168,56,.3)}
+.tag{padding:8px 14px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#999;font-size:13px;display:inline-block;margin:0 4px 8px 0}
+.fi{animation:fu .35s ease forwards}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.et{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(239,83,80,.9);color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;z-index:200;display:none}
+.ty{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px}
+.hint{color:#888;font-size:13px;font-style:italic;margin-bottom:20px;line-height:1.5;padding:12px 16px;border-left:3px solid rgba(232,168,56,.4);background:rgba(232,168,56,.05);border-radius:0 8px 8px 0}
 </style>
 </head>
 <body>
-
 <div id="app"></div>
-
 <script>
-const CONFIG = {
-  serviceId: "service_333vq8h",
-  templateId: "template_14jkmvg",
-  publicKey: "Ho9TKfiAcFDFDgQhk"
-};
-
-const SCALE_LABELS = ["No", "Poco", "Così così", "Abbastanza", "Sì, molto"];
-const SCALE_COLORS = [
-  { bg: "rgba(239,83,80,0.15)", border: "#ef5350", text: "#ef5350" },
-  { bg: "rgba(255,167,38,0.15)", border: "#ffa726", text: "#ffa726" },
-  { bg: "rgba(255,238,88,0.12)", border: "#c9b458", text: "#c9b458" },
-  { bg: "rgba(102,187,106,0.15)", border: "#66bb6a", text: "#66bb6a" },
-  { bg: "rgba(76,175,80,0.2)", border: "#4caf50", text: "#4caf50" },
+const C={s:"service_333vq8h",t:"template_14jkmvg",p:"Ho9TKfiAcFDFDgQhk"};
+const SL=["No","Poco","Così così","Abbastanza","Sì, molto"];
+const SC=[
+{bg:"rgba(239,83,80,.15)",b:"#ef5350",t:"#ef5350"},
+{bg:"rgba(255,167,38,.15)",b:"#ffa726",t:"#ffa726"},
+{bg:"rgba(255,238,88,.12)",b:"#c9b458",t:"#c9b458"},
+{bg:"rgba(102,187,106,.15)",b:"#66bb6a",t:"#66bb6a"},
+{bg:"rgba(76,175,80,.2)",b:"#4caf50",t:"#4caf50"}
 ];
 
-const SECTIONS = [
-  { title: "Chi sei", icon: "👤", questions: [
-    { id: "s1", text: "Quanti anni hai?", type: "select", options: ["14-17", "18-22", "23-27", "28-35", "36+"] },
-    { id: "s2", text: "Cosa fai nella vita?", type: "select", options: ["Studente", "Lavoratore dipendente", "Libero professionista", "Sportivo", "Disoccupato / in cerca"] },
-    { id: "s3", text: "Vivi ancora con la famiglia?", type: "scale" },
-    { id: "s4", text: "Hai già responsabilità economiche?", type: "scale" },
-    { id: "s5", text: "Stai cercando un'entrata extra?", type: "scale" },
-    { id: "s6", text: "Stai cercando una professione futura?", type: "scale" },
-    { id: "s7", text: "Stai cercando crescita personale?", type: "scale" },
-    { id: "s8", text: "Stai cercando indipendenza economica?", type: "scale" },
-  ]},
-  { title: "La tua situazione oggi", icon: "📍", questions: [
-    { id: "s9", text: "Sai gestire i tuoi soldi?", type: "scale" },
-    { id: "s10", text: "Hai già sentito parlare di trading?", type: "scale" },
-    { id: "s11", text: "Hai già provato a fare trading da solo?", type: "scale" },
-    { id: "s12", text: "Hai perso soldi in passato?", type: "scale" },
-    { id: "s13", text: "Ti senti confuso da troppe informazioni viste online?", type: "scale" },
-    { id: "s14", text: "Segui già qualche guru o formatore online?", type: "scale" },
-    { id: "s15", text: "Stai cercando una guida seria e affidabile?", type: "scale" },
-  ]},
-  { title: "Le tue difficoltà", icon: "🧱", questions: [
-    { id: "s16", text: "Hai paura di perdere soldi?", type: "scale" },
-    { id: "s17", text: "Fai fatica ad essere costante?", type: "scale" },
-    { id: "s18", text: "Ti fai prendere dalle emozioni?", type: "scale" },
-    { id: "s19", text: "Cerchi guadagni veloci?", type: "scale" },
-    { id: "s20", text: "Senti di non avere un metodo?", type: "scale" },
-    { id: "s21", text: "Non sai da dove iniziare?", type: "scale" },
-    { id: "s22", text: "Ti senti solo e senza guida?", type: "scale" },
-    { id: "s23", text: "Ti senti bloccato mentalmente?", type: "scale" },
-    { id: "s24", text: "Hai poca fiducia in te stesso?", type: "scale" },
-    { id: "s25", text: "C'è qualcos'altro che ti blocca?", type: "textarea" },
-  ]},
-  { title: "I tuoi desideri", icon: "🔥", questions: [
-    { id: "s26", text: "Vuoi libertà economica?", type: "scale" },
-    { id: "s27", text: "Vuoi non dipendere da un lavoro fisso?", type: "scale" },
-    { id: "s28", text: "Vuoi sentirti più sicuro e capace?", type: "scale" },
-    { id: "s29", text: "Vuoi costruire una competenza vera?", type: "scale" },
-    { id: "s30", text: "Vuoi aiutare la tua famiglia?", type: "scale" },
-    { id: "s31", text: "Vuoi dimostrare qualcosa a te stesso?", type: "scale" },
-    { id: "s32", text: "Vuoi creare una nuova versione di te?", type: "scale" },
-    { id: "s33", text: "Vuoi imparare disciplina e autocontrollo?", type: "scale" },
-    { id: "s34", text: "Se potessi descrivere la vita che vuoi tra 1 anno, come sarebbe?", type: "textarea" },
-  ]},
-  { title: "I tuoi obiettivi", icon: "🎯", questions: [
-    { id: "s35", text: "Vuoi capire le basi del trading nei prossimi 3 mesi?", type: "scale" },
-    { id: "s36", text: "Vuoi costruire una routine di studio?", type: "scale" },
-    { id: "s37", text: "Vuoi imparare a leggere il mercato?", type: "scale" },
-    { id: "s38", text: "Vuoi arrivare a fare trading in autonomia?", type: "scale" },
-    { id: "s39", text: "Vuoi prima lavorare sulla mentalità?", type: "scale" },
-    { id: "s40", text: "Vuoi partire subito con la tecnica?", type: "scale" },
-    { id: "s41", text: "Quanto tempo puoi dedicare ogni giorno?", type: "select", options: ["Meno di 30 minuti", "30 minuti - 1 ora", "1-2 ore", "Più di 2 ore"] },
-  ]},
-  { title: "Quanto sei consapevole", icon: "🧠", questions: [
-    { id: "s42", text: "Sai davvero cosa significa fare trading?", type: "scale" },
-    { id: "s43", text: "Hai capito che non è un gioco?", type: "scale" },
-    { id: "s44", text: "Sei disposto a studiare seriamente?", type: "scale" },
-    { id: "s45", text: "Sei pronto a lavorare su te stesso, non solo sui grafici?", type: "scale" },
-    { id: "s46", text: "Accetti che servano disciplina e pazienza?", type: "scale" },
-    { id: "s47", text: "Cerchi un percorso vero, non scorciatoie?", type: "scale" },
-    { id: "s48", text: "Sei pronto a imparare anche dai tuoi errori?", type: "scale" },
-  ]},
-  { title: "Il tuo carattere", icon: "💎", questions: [
-    { id: "s49", text: "Sei una persona calma e riflessiva?", type: "scale" },
-    { id: "s50", text: "Sei impulsivo, agisci di pancia?", type: "scale" },
-    { id: "s51", text: "Sei costante quando inizi qualcosa?", type: "scale" },
-    { id: "s52", text: "Hai bisogno di essere motivato spesso?", type: "scale" },
-    { id: "s53", text: "Sei competitivo?", type: "scale" },
-    { id: "s54", text: "Ti scoraggi facilmente?", type: "scale" },
-    { id: "s55", text: "Reagisci bene alle regole?", type: "scale" },
-    { id: "s56", text: "Come impari meglio?", type: "select", options: ["Con la teoria e lo studio", "Con la pratica diretta", "Con esempi concreti e storie vere", "Un mix di tutto"] },
-    { id: "s57", text: "Di che tipo di guida hai bisogno?", type: "select", options: ["Una guida forte con regole precise", "Un accompagnamento gentile e paziente", "Qualcuno che mi motivi e mi spinga", "Qualcuno che mi capisca emotivamente"] },
-  ]},
-  { title: "Le tue paure", icon: "😰", questions: [
-    { id: "s58", text: "Hai paura di fallire?", type: "scale" },
-    { id: "s59", text: "Hai paura del giudizio degli altri?", type: "scale" },
-    { id: "s60", text: "Hai paura di non essere abbastanza intelligente?", type: "scale" },
-    { id: "s61", text: "Hai paura di perdere tempo?", type: "scale" },
-    { id: "s62", text: "Hai paura di perdere soldi e sentirti stupido?", type: "scale" },
-    { id: "s63", text: "Hai paura di impegnarti e poi mollare?", type: "scale" },
-    { id: "s64", text: "Hai paura del cambiamento?", type: "scale" },
-    { id: "s65", text: "Hai paura di diventare davvero indipendente?", type: "scale" },
-    { id: "s66", text: "C'è una paura che non hai mai detto a nessuno?", type: "textarea", placeholder: "Se vuoi, scrivila qui..." },
-  ]},
-  { title: "Ostacoli pratici", icon: "⚡", questions: [
-    { id: "s67", text: "Hai poco tempo?", type: "scale" },
-    { id: "s68", text: "Hai poca concentrazione?", type: "scale" },
-    { id: "s69", text: "Hai un budget limitato?", type: "scale" },
-    { id: "s70", text: "Hai persone intorno che ti scoraggiano?", type: "scale" },
-    { id: "s71", text: "Usi troppo i social e ti distrai facilmente?", type: "scale" },
-    { id: "s72", text: "Ti manca una routine quotidiana?", type: "scale" },
-    { id: "s73", text: "Ti manca pazienza?", type: "scale" },
-    { id: "s74", text: "Ti manca autocontrollo?", type: "scale" },
-  ]},
-  { title: "Cosa cerchi in un mentore", icon: "🧭", questions: [
-    { id: "s75", text: "Vuoi qualcuno che ti motivi?", type: "scale" },
-    { id: "s76", text: "Vuoi qualcuno che ti dia regole precise?", type: "scale" },
-    { id: "s77", text: "Vuoi qualcuno che ti capisca anche emotivamente?", type: "scale" },
-    { id: "s78", text: "Cerchi un esempio da seguire?", type: "scale" },
-    { id: "s79", text: "Cerchi credibilità e autenticità?", type: "scale" },
-    { id: "s80", text: "Cerchi semplicità nelle spiegazioni?", type: "scale" },
-    { id: "s81", text: "Cerchi una persona vera, non costruita?", type: "scale" },
-    { id: "s82", text: "Cerchi qualcuno che unisca tecnica e mentalità?", type: "scale" },
-  ]},
+const S=[
+// 1 - CHI SEI
+{title:"Chi sei",icon:"👤",hint:"Aiutami a conoscerti: queste domande servono a capire il tuo punto di partenza.",questions:[
+{id:"s1",text:"Quanti anni hai?",type:"select",options:["14-17","18-22","23-27","28-35","36+"]},
+{id:"s2",text:"Cosa fai nella vita?",type:"select",options:["Studente","Lavoratore dipendente","Libero professionista","Sportivo","Disoccupato / in cerca"]},
+{id:"s3",text:"Vivi ancora con la famiglia?",type:"scale"},
+{id:"s4",text:"Hai già responsabilità economiche?",type:"scale"},
+{id:"s5",text:"Stai cercando un'entrata extra?",type:"scale"},
+{id:"s6",text:"Stai cercando una professione futura?",type:"scale"},
+{id:"s7",text:"Stai cercando crescita personale?",type:"scale"},
+{id:"s8",text:"Stai cercando indipendenza economica?",type:"scale"},
+]},
+// 2 - SITUAZIONE OGGI
+{title:"La tua situazione oggi",icon:"📍",hint:"Sii onesto: non ci sono risposte giuste o sbagliate.",questions:[
+{id:"s9",text:"Sai gestire i tuoi soldi?",type:"scale"},
+{id:"s10",text:"Hai già sentito parlare di trading?",type:"scale"},
+{id:"s11",text:"Hai già provato a fare trading da solo?",type:"scale"},
+{id:"s12",text:"Hai perso soldi in passato?",type:"scale"},
+{id:"s13",text:"Ti senti confuso da troppe informazioni viste online?",type:"scale"},
+{id:"s14",text:"Segui già qualche guru o formatore online?",type:"scale"},
+{id:"s15",text:"Stai cercando una guida seria e affidabile?",type:"scale"},
+]},
+// 3 - ESPERIENZA E METODO OPERATIVO
+{title:"La tua esperienza operativa",icon:"📊",hint:"Non ti chiedo definizioni tecniche, ma voglio capire come lavori (o come hai lavorato finora).",questions:[
+{id:"t1",text:"Da quanto tempo ti interessi al trading?",type:"select",options:["Non ho mai iniziato","Meno di 3 mesi","3-6 mesi","6 mesi - 1 anno","1-2 anni","Più di 2 anni"]},
+{id:"t2",text:"Hai mai operato con soldi veri?",type:"scale"},
+{id:"t3",text:"Hai mai usato un conto demo?",type:"scale"},
+{id:"t4",text:"Hai un metodo o una strategia che segui?",type:"scale"},
+{id:"t5",text:"Se sì, descrivi brevemente il tuo metodo attuale",type:"textarea",placeholder:"Es: seguo i breakout su H1, uso le medie mobili, faccio scalping su crypto..."},
+{id:"t6",text:"Su quale timeframe operi di solito?",type:"select",options:["Non lo so ancora","Scalping (M1-M5)","Intraday (M15-H1)","Swing (H4-D1)","Position (settimanale+)","Ho provato un po' di tutto"]},
+{id:"t7",text:"Su quale mercato hai operato o vorresti operare?",type:"select",options:["Forex","Crypto","Azioni/Indici","Materie prime","Non ho ancora deciso"]},
+{id:"t8",text:"Quale piattaforma usi o hai usato?",type:"select",options:["Non ne ho mai usata una","MetaTrader 4/5","TradingView","Binance/Exchange crypto","Altra piattaforma"]},
+{id:"t9",text: "Dove hai studiato finora? (corsi, YouTube, libri, mentori...)",type:"textarea",placeholder:"Racconta le tue fonti principali di informazione..."},
+{id:"t10",text:"Tieni o hai mai tenuto un diario di trading?",type:"scale"},
+{id:"t11",text:"Con quale capitale vorresti iniziare (o hai iniziato)?",type:"select",options:["Non ho ancora un budget","Meno di 500€","500€ - 2.000€","2.000€ - 10.000€","Più di 10.000€"]},
+]},
+// 4 - COME RAGIONI
+{title:"Come ragioni",icon:"🔍",hint:"Questa sezione mi aiuta a capire come funziona la tua testa quando prendi decisioni.",questions:[
+{id:"r1",text:"Quando devi prendere una decisione importante, di solito...",type:"select",options:["Agisco d'istinto, velocemente","Ci penso troppo e a volte non decido","Analizzo i pro e i contro con calma","Chiedo consiglio agli altri prima di decidere"]},
+{id:"r2",text:"Quando qualcosa non va come previsto, di solito...",type:"select",options:["Mi arrabbio e mi blocco","Cerco subito una soluzione","Mi abbatto e ci metto tempo a riprendermi","Analizzo cosa è andato storto e imparo"]},
+{id:"r3",text:"Riesci a cambiare idea quando ti mostrano un punto di vista migliore?",type:"scale"},
+{id:"r4",text:"Sai distinguere tra una decisione sbagliata e un risultato sfortunato?",type:"scale"},
+{id:"r5",text:"Riesci a ragionare con lucidità quando sei sotto pressione?",type:"scale"},
+{id:"r6",text:"Ti fidi più dei dati o dell'intuito?",type:"select",options:["Quasi sempre intuito","Più intuito che dati","Un mix equilibrato","Più dati che intuito","Quasi sempre dati"]},
+{id:"r7",text:"Quando fai un errore, ti concentri sulla colpa o sulla lezione?",type:"scale"},
+{id:"r8",text:"Riesci a pensare a lungo termine o ti concentri sempre sul breve?",type:"scale"},
+{id:"r9",text:"Come gestisci l'incertezza? (quando non sai cosa succederà)",type:"textarea",placeholder:"Descrivi come ti senti e come reagisci..."},
+]},
+// 5 - MINDSET E PSICOLOGIA
+{title:"Mindset e psicologia",icon:"🧠",hint:"Il trading è 80% testa. Queste domande mi aiutano a capire dove sei forte e dove possiamo lavorare.",questions:[
+{id:"p1",text:"Come reagisci quando perdi soldi? (1=panico totale, 5=calma assoluta)",type:"scale"},
+{id:"p2",text:"Riesci a staccarti dal grafico dopo un'operazione?",type:"scale"},
+{id:"p3",text:"Ti capita di fare trading per 'vendicarti' di una perdita?",type:"scale"},
+{id:"p4",text:"Riesci a dormire tranquillo con un'operazione aperta?",type:"scale"},
+{id:"p5",text:"Ti paragoni spesso ad altri trader o persone di successo?",type:"scale"},
+{id:"p6",text:"Riesci a seguire le regole anche quando le emozioni dicono il contrario?",type:"scale"},
+{id:"p7",text:"Ti senti in colpa quando perdi?",type:"scale"},
+{id:"p8",text:"Dopo un guadagno, tendi a rischiare di più?",type:"scale"},
+{id:"p9",text:"Quanto il tuo umore dipende dai risultati del trading?",type:"scale"},
+{id:"p10",text:"C'è qualcosa a livello mentale che senti ti stia frenando?",type:"textarea",placeholder:"Scrivi liberamente..."},
+]},
+// 6 - DIFFICOLTA
+{title:"Le tue difficoltà",icon:"🧱",hint:"Capire dove fai fatica è il primo passo per superare i blocchi.",questions:[
+{id:"s16",text:"Hai paura di perdere soldi?",type:"scale"},
+{id:"s17",text:"Fai fatica ad essere costante?",type:"scale"},
+{id:"s18",text:"Ti fai prendere dalle emozioni?",type:"scale"},
+{id:"s19",text:"Cerchi guadagni veloci?",type:"scale"},
+{id:"s20",text:"Senti di non avere un metodo?",type:"scale"},
+{id:"s21",text:"Non sai da dove iniziare?",type:"scale"},
+{id:"s22",text:"Ti senti solo e senza guida?",type:"scale"},
+{id:"s23",text:"Ti senti bloccato mentalmente?",type:"scale"},
+{id:"s24",text:"Hai poca fiducia in te stesso?",type:"scale"},
+{id:"s25",text:"C'è qualcos'altro che ti blocca?",type:"textarea"},
+]},
+// 7 - DESIDERI
+{title:"I tuoi desideri",icon:"🔥",questions:[
+{id:"s26",text:"Vuoi libertà economica?",type:"scale"},
+{id:"s27",text:"Vuoi non dipendere da un lavoro fisso?",type:"scale"},
+{id:"s28",text:"Vuoi sentirti più sicuro e capace?",type:"scale"},
+{id:"s29",text:"Vuoi costruire una competenza vera?",type:"scale"},
+{id:"s30",text:"Vuoi aiutare la tua famiglia?",type:"scale"},
+{id:"s31",text:"Vuoi dimostrare qualcosa a te stesso?",type:"scale"},
+{id:"s32",text:"Vuoi creare una nuova versione di te?",type:"scale"},
+{id:"s33",text:"Vuoi imparare disciplina e autocontrollo?",type:"scale"},
+{id:"s34",text:"Se potessi descrivere la vita che vuoi tra 1 anno, come sarebbe?",type:"textarea"},
+]},
+// 8 - OBIETTIVI
+{title:"I tuoi obiettivi",icon:"🎯",hint:"Definire obiettivi chiari è fondamentale. Sii il più specifico possibile.",questions:[
+{id:"o1",text:"Qual è il tuo obiettivo nei prossimi 30 GIORNI?",type:"textarea",placeholder:"Es: capire le basi, aprire un conto demo, studiare 30 min al giorno..."},
+{id:"o2",text:"Qual è il tuo obiettivo nei prossimi 3 MESI?",type:"textarea",placeholder:"Es: avere un metodo chiaro, fare i primi trade in demo, costruire una routine..."},
+{id:"o3",text:"Qual è il tuo obiettivo nei prossimi 6 MESI?",type:"textarea",placeholder:"Es: operare in autonomia, avere disciplina, generare i primi risultati..."},
+{id:"o4",text:"Qual è il tuo obiettivo a 1 ANNO?",type:"textarea",placeholder:"Es: fare trading come seconda entrata, essere indipendente..."},
+{id:"o5",text:"Quanto tempo puoi dedicare ogni giorno?",type:"select",options:["Meno di 30 minuti","30 minuti - 1 ora","1-2 ore","Più di 2 ore"]},
+{id:"o6",text:"In quali momenti della giornata puoi studiare/operare?",type:"select",options:["Mattina presto (6-9)","Mattina (9-12)","Pomeriggio (12-18)","Sera (18-23)","Orari variabili"]},
+{id:"o7",text:"Vuoi prima lavorare sulla mentalità?",type:"scale"},
+{id:"o8",text:"Vuoi partire subito con la tecnica?",type:"scale"},
+]},
+// 9 - OBIETTIVI FINANZIARI
+{title:"Obiettivi finanziari",icon:"💰",hint:"Non esistono risposte giuste. Serve capire le tue aspettative per impostare un percorso realistico.",questions:[
+{id:"f_1",text:"Quanto vorresti guadagnare al mese col trading come primo traguardo realistico?",type:"select",options:["Non ho ancora un'idea","200-500€ al mese","500-1.000€ al mese","1.000-3.000€ al mese","Più di 3.000€ al mese"]},
+{id:"f_2",text:"Hai un obiettivo finanziario preciso? (toglierti un debito, comprare qualcosa, contribuire in casa...)",type:"textarea",placeholder:"Descrivi il tuo obiettivo concreto..."},
+{id:"f_3",text:"Saresti soddisfatto di un rendimento del 3-5% al mese sul tuo capitale?",type:"scale"},
+{id:"f_4",text:"Capisci che il trading non è uno stipendio fisso?",type:"scale"},
+{id:"f_5",text:"Hai un fondo di emergenza separato dal capitale di trading?",type:"scale"},
+{id:"f_6",text:"Sei disposto a non toccare i profitti per farli crescere?",type:"scale"},
+{id:"f_7",text:"Hai debiti o situazioni finanziarie che ti mettono pressione?",type:"scale"},
+]},
+// 10 - ABITUDINI QUOTIDIANE
+{title:"Le tue abitudini quotidiane",icon:"🕐",hint:"Le abitudini fuori dal trading influenzano enormemente i risultati dentro al trading.",questions:[
+{id:"h1",text:"A che ora ti svegli di solito?",type:"select",options:["Prima delle 6","Tra le 6 e le 8","Tra le 8 e le 10","Dopo le 10","Non ho orari fissi"]},
+{id:"h2",text:"Hai una routine mattutina?",type:"scale"},
+{id:"h3",text:"Quanto tempo passi sui social al giorno?",type:"select",options:["Meno di 1 ora","1-2 ore","2-4 ore","Più di 4 ore"]},
+{id:"h4",text:"Fai attività fisica regolarmente?",type:"scale"},
+{id:"h5",text:"Mediti o fai esercizi di respirazione/mindfulness?",type:"scale"},
+{id:"h6",text:"Leggi libri o contenuti formativi regolarmente?",type:"scale"},
+{id:"h7",text:"Quanto dormi in media a notte?",type:"select",options:["Meno di 5 ore","5-6 ore","6-7 ore","7-8 ore","Più di 8 ore"]},
+{id:"h8",text:"Ti distrai spesso quando studi o lavori?",type:"scale"},
+{id:"h9",text:"Hai un ambiente di studio/lavoro ordinato e tranquillo?",type:"scale"},
+{id:"h10",text:"Descrivi brevemente la tua giornata tipo",type:"textarea",placeholder:"Da quando ti svegli a quando vai a dormire..."},
+]},
+// 11 - PAURE
+{title:"Le tue paure",icon:"😰",hint:"Le paure non sono debolezze: riconoscerle è il primo passo per superarle.",questions:[
+{id:"s58",text:"Hai paura di fallire?",type:"scale"},
+{id:"s59",text:"Hai paura del giudizio degli altri?",type:"scale"},
+{id:"s60",text:"Hai paura di non essere abbastanza intelligente?",type:"scale"},
+{id:"s61",text:"Hai paura di perdere tempo?",type:"scale"},
+{id:"s62",text:"Hai paura di perdere soldi e sentirti stupido?",type:"scale"},
+{id:"s63",text:"Hai paura di impegnarti e poi mollare?",type:"scale"},
+{id:"s64",text:"Hai paura del cambiamento?",type:"scale"},
+{id:"s65",text:"Hai paura di diventare davvero indipendente?",type:"scale"},
+{id:"s66",text:"C'è una paura che non hai mai detto a nessuno?",type:"textarea",placeholder:"Se vuoi, scrivila qui..."},
+]},
+// 12 - CARATTERE
+{title:"Il tuo carattere",icon:"💎",questions:[
+{id:"s49",text:"Sei una persona calma e riflessiva?",type:"scale"},
+{id:"s50",text:"Sei impulsivo, agisci di pancia?",type:"scale"},
+{id:"s51",text:"Sei costante quando inizi qualcosa?",type:"scale"},
+{id:"s52",text:"Hai bisogno di essere motivato spesso?",type:"scale"},
+{id:"s53",text:"Sei competitivo?",type:"scale"},
+{id:"s54",text:"Ti scoraggi facilmente?",type:"scale"},
+{id:"s55",text:"Reagisci bene alle regole?",type:"scale"},
+{id:"s56",text:"Come impari meglio?",type:"select",options:["Con la teoria e lo studio","Con la pratica diretta","Con esempi concreti e storie vere","Un mix di tutto"]},
+{id:"s57",text:"Di che tipo di guida hai bisogno?",type:"select",options:["Una guida forte con regole precise","Un accompagnamento gentile e paziente","Qualcuno che mi motivi e mi spinga","Qualcuno che mi capisca emotivamente"]},
+]},
+// 13 - OSTACOLI
+{title:"Ostacoli pratici",icon:"⚡",questions:[
+{id:"s67",text:"Hai poco tempo?",type:"scale"},
+{id:"s68",text:"Hai poca concentrazione?",type:"scale"},
+{id:"s69",text:"Hai un budget limitato?",type:"scale"},
+{id:"s70",text:"Hai persone intorno che ti scoraggiano?",type:"scale"},
+{id:"s71",text:"Usi troppo i social e ti distrai facilmente?",type:"scale"},
+{id:"s72",text:"Ti manca una routine quotidiana?",type:"scale"},
+{id:"s73",text:"Ti manca pazienza?",type:"scale"},
+{id:"s74",text:"Ti manca autocontrollo?",type:"scale"},
+]},
+// 14 - MENTORE
+{title:"Cosa cerchi in un mentore",icon:"🧭",questions:[
+{id:"s75",text:"Vuoi qualcuno che ti motivi?",type:"scale"},
+{id:"s76",text:"Vuoi qualcuno che ti dia regole precise?",type:"scale"},
+{id:"s77",text:"Vuoi qualcuno che ti capisca anche emotivamente?",type:"scale"},
+{id:"s78",text:"Cerchi un esempio da seguire?",type:"scale"},
+{id:"s79",text:"Cerchi credibilità e autenticità?",type:"scale"},
+{id:"s80",text:"Cerchi semplicità nelle spiegazioni?",type:"scale"},
+{id:"s81",text:"Cerchi una persona vera, non costruita?",type:"scale"},
+{id:"s82",text:"Cerchi qualcuno che unisca tecnica e mentalità?",type:"scale"},
+]},
+// 15 - PAROLE FINALI
+{title:"Le tue parole finali",icon:"✍️",hint:"Quest'ultima sezione è tutta tua. Scrivi liberamente, senza filtri.",questions:[
+{id:"ff1",text:"Perché hai deciso di compilare questo questionario oggi?",type:"textarea",placeholder:"Cosa ti ha spinto a fare questo passo..."},
+{id:"ff2",text:"Cosa ti aspetti da un percorso di mentoring?",type:"textarea",placeholder:"Cosa vorresti ricevere, imparare, diventare..."},
+{id:"ff3",text:"C'è qualcosa che vuoi dirmi e che non ti ho chiesto?",type:"textarea",placeholder:"Qualsiasi cosa tu voglia aggiungere..."},
+{id:"ff4",text:"Su una scala da 1 a 5, quanto sei determinato a cambiare la tua situazione?",type:"scale"},
+{id:"ff5",text:"Sei pronto a iniziare?",type:"scale"},
+]},
 ];
 
-let state = { step: -1, answers: {}, name: "" };
-const app = document.getElementById("app");
+let st={step:-1,ans:{},cmt:{},name:"",openCmt:{}};
+const ap=document.getElementById("app");
 
-function render() {
-  if (state.step === -1) renderIntro();
-  else if (state.step === SECTIONS.length) renderThankYou();
-  else renderWizard();
+function rp(){if(st.step===-1)ri();else if(st.step===S.length)rt();else rw();}
+
+function ri(){
+let tg=S.map(s=>`<span class="tag">${s.icon} ${s.title}</span>`).join("");
+ap.innerHTML=`<div class="ctn" style="text-align:center;padding-top:56px">
+<div style="font-size:48px;margin-bottom:16px">📝</div>
+<h1 class="gold">Scopri il tuo percorso</h1>
+<p class="sub">Rispondi a queste domande per aiutarmi a capire chi sei, dove vuoi arrivare e come posso guidarti al meglio. Ci vogliono circa 10-12 minuti.</p>
+<div style="margin:32px 0;text-align:left">
+<label class="qlbl">Come ti chiami?</label>
+<input type="text" class="ni" id="ni" placeholder="Il tuo nome..." value="${st.name}">
+</div>
+<div style="text-align:left;margin-bottom:32px">${tg}</div>
+<button class="bst" onclick="go()">Inizia →</button>
+</div>`;}
+
+function rw(){
+const sec=S[st.step];const il=st.step===S.length-1;
+let h=sec.hint?`<div class="hint">${sec.hint}</div>`:"";
+let qs=sec.questions.map(q=>{
+let cmtHtml="";
+if(q.type!=="textarea"){
+const isOpen=st.openCmt[q.id];
+const cmtVal=st.cmt[q.id]||"";
+if(isOpen){
+cmtHtml=`<textarea class="cmt" rows="2" id="cmt_${q.id}" placeholder="Aggiungi un commento..." oninput="ci('${q.id}',this.value)">${cmtVal}</textarea>`;
+}else{
+cmtHtml=cmtVal
+?`<textarea class="cmt" rows="2" id="cmt_${q.id}" placeholder="Aggiungi un commento..." oninput="ci('${q.id}',this.value)">${cmtVal}</textarea>`
+:`<span class="cmt-toggle" onclick="oc('${q.id}')">+ Vuoi aggiungere qualcosa?</span>`;
+}
+}
+return`<div style="margin-bottom:24px">
+<label class="qlbl">${q.text}</label>${rq(q)}${cmtHtml}</div>`;
+}).join("");
+ap.innerHTML=`<div class="ctn wiz">
+<div style="display:flex;justify-content:space-between;margin-bottom:8px">
+<span style="color:#666;font-size:13px">📝 ${st.name||"Studente"}</span>
+<span style="color:#666;font-size:13px">${st.step+1}/${S.length}</span></div>
+<div class="pbar-w"><div class="pbar" style="width:${((st.step+1)/S.length)*100}%"></div></div>
+<div class="fi" style="margin-top:32px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+<span style="font-size:32px">${sec.icon}</span>
+<h2 class="stitle">${sec.title}</h2></div>${h}${qs}</div>
+<div class="nav">
+<button class="bbk" onclick="pv()">← Indietro</button>
+${il?`<button class="bsn" id="sb" onclick="snd()">✓ Invia le risposte</button>`
+:`<button class="bnx" onclick="nx()">Avanti →</button>`}</div>
+<div class="et" id="et">Errore nell'invio. Riprova tra qualche secondo.</div>
+</div>`;}
+
+function rq(q){
+if(q.type==="scale"){return`<div class="sr">${SL.map((l,i)=>{
+const v=i+1,a=st.ans[q.id]===v,c=SC[i];
+return`<button class="sb" style="${a?`border:2.5px solid ${c.b};background:${c.bg}`:""}" onclick="ss('${q.id}',${v})">
+<span class="n" style="${a?`color:${c.t}`:""}">${v}</span>
+<span class="l" style="${a?`color:${c.t}`:""}">${l}</span></button>`;}).join("")}</div>`;}
+if(q.type==="select"){return q.options.map(o=>{const a=st.ans[q.id]===o;
+return`<button class="selbtn${a?" a":""}" onclick="sl('${q.id}','${o.replace(/'/g,"\\'")}')">${o}</button>`;}).join("");}
+if(q.type==="textarea"){const v=st.ans[q.id]||"";
+return`<textarea class="ans" rows="3" id="ta_${q.id}" placeholder="${q.placeholder||'Scrivi qui la tua risposta...'}" oninput="ti('${q.id}',this.value)">${v}</textarea>`;}
+return"";}
+
+function rt(){
+ap.innerHTML=`<div class="ty"><div style="max-width:500px">
+<div style="font-size:64px;margin-bottom:24px">🎉</div>
+<h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:#4caf50;margin-bottom:16px">Grazie ${st.name||""}!</h1>
+<p style="color:#aaa;font-size:16px;line-height:1.6">Le tue risposte sono state inviate con successo. Ti ricontatterò presto per capire insieme come posso aiutarti nel tuo percorso.</p>
+<div style="margin-top:32px;width:60px;height:3px;background:linear-gradient(90deg,#e8a838,#4caf50);border-radius:99px;margin:32px auto 0"></div>
+</div></div>`;}
+
+function ti(id,v){st.ans[id]=v;}
+function ci(id,v){st.cmt[id]=v;}
+function ss(id,v){st.ans[id]=v;saveta();rp();}
+function sl(id,v){st.ans[id]=v;saveta();rp();}
+function oc(id){st.openCmt[id]=true;saveta();rp();setTimeout(()=>{const el=document.getElementById("cmt_"+id);if(el)el.focus();},50);}
+
+function saveta(){
+document.querySelectorAll("textarea.ans").forEach(t=>{const id=t.id.replace("ta_","");if(id)st.ans[id]=t.value;});
+document.querySelectorAll("textarea.cmt").forEach(t=>{const id=t.id.replace("cmt_","");if(id)st.cmt[id]=t.value;});
 }
 
-function renderIntro() {
-  let tags = SECTIONS.map(s => `<span class="tag">${s.icon} ${s.title}</span>`).join("");
-  app.innerHTML = `
-    <div class="container" style="text-align:center; padding-top:56px;">
-      <div style="font-size:48px; margin-bottom:16px;">📝</div>
-      <h1 class="gold">Scopri il tuo percorso</h1>
-      <p class="subtitle">Rispondi a queste domande per aiutarmi a capire chi sei, dove vuoi arrivare e come posso guidarti al meglio. Ci vogliono circa 5 minuti.</p>
-      <div style="margin:32px 0; text-align:left;">
-        <label class="question-label">Come ti chiami?</label>
-        <input type="text" class="name-input" id="nameInput" placeholder="Il tuo nome..." value="${state.name}">
-      </div>
-      <div style="text-align:left; margin-bottom:32px;">${tags}</div>
-      <button class="btn-start" onclick="startQuiz()">Inizia →</button>
-    </div>`;
-}
+function go(){st.name=document.getElementById("ni").value;st.step=0;rp();window.scrollTo(0,0);}
+function nx(){saveta();st.step++;rp();window.scrollTo(0,0);}
+function pv(){saveta();if(st.step>0)st.step--;else st.step=-1;rp();window.scrollTo(0,0);}
 
-function renderWizard() {
-  const sec = SECTIONS[state.step];
-  const isLast = state.step === SECTIONS.length - 1;
-  let qs = sec.questions.map(q => `
-    <div style="margin-bottom:24px;">
-      <label class="question-label">${q.text}</label>
-      ${renderQuestion(q)}
-    </div>`).join("");
+function gr(){
+let x="QUESTIONARIO STUDENTE - "+(st.name||"Anonimo")+"\n";
+x+="Data: "+new Date().toLocaleDateString("it-IT")+"\n";
+x+="==================================================\n\n";
+S.forEach(sec=>{
+x+=sec.icon+" "+sec.title.toUpperCase()+"\n";
+x+="--------------------------------------------\n";
+sec.questions.forEach(q=>{
+const v=st.ans[q.id];const cm=st.cmt[q.id];
+if(q.type==="scale"){
+const f=v||0;const b="#".repeat(f)+".".repeat(5-f);
+const l=v?SL[v-1]:"(nessuna risposta)";
+x+=q.text+"\n  ["+b+"] "+(v||"-")+"/5 - "+l+"\n";
+}else{x+=q.text+"\n  -> "+(v||"(nessuna risposta)")+"\n";}
+if(cm)x+="  Commento: "+cm+"\n";
+x+="\n";
+});x+="\n";});return x;}
 
-  app.innerHTML = `
-    <div class="container wizard">
-      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-        <span style="color:#666; font-size:13px;">📝 ${state.name || "Studente"}</span>
-        <span style="color:#666; font-size:13px;">${state.step + 1}/${SECTIONS.length}</span>
-      </div>
-      <div class="progress-wrap"><div class="progress-bar" style="width:${((state.step + 1) / SECTIONS.length) * 100}%"></div></div>
-      <div class="fade-in" style="margin-top:32px;">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
-          <span style="font-size:32px;">${sec.icon}</span>
-          <h2 class="section-title">${sec.title}</h2>
-        </div>
-        ${qs}
-      </div>
-      <div class="nav-bar">
-        <button class="btn-back" onclick="prevStep()">← Indietro</button>
-        ${isLast
-          ? `<button class="btn-send" id="sendBtn" onclick="sendResults()">✓ Invia le risposte</button>`
-          : `<button class="btn-next" onclick="nextStep()">Avanti →</button>`}
-      </div>
-      <div class="error-toast" id="errorToast">Errore nell'invio. Riprova tra qualche secondo.</div>
-    </div>`;
-}
+async function snd(){
+saveta();const b=document.getElementById("sb");
+b.textContent="Invio in corso...";b.disabled=true;b.style.background="#555";b.style.cursor="wait";
+try{await emailjs.send(C.s,C.t,{section_title:"Studente - "+(st.name||"Anonimo"),results:gr()},C.p);
+st.step=S.length;rp();
+}catch(e){console.error("EmailJS error:",e);
+document.getElementById("et").style.display="block";
+b.textContent="✓ Invia le risposte";b.disabled=false;
+b.style.background="linear-gradient(135deg,#4caf50,#388e3c)";b.style.cursor="pointer";
+setTimeout(()=>{document.getElementById("et").style.display="none";},4000);}}
 
-function renderQuestion(q) {
-  if (q.type === "scale") {
-    return `<div class="scale-row">${SCALE_LABELS.map((lbl, i) => {
-      const val = i + 1;
-      const active = state.answers[q.id] === val;
-      const c = SCALE_COLORS[i];
-      return `<button class="scale-btn" style="${active ? `border:2.5px solid ${c.border}; background:${c.bg};` : ""}" onclick="setAnswer('${q.id}', ${val})">
-        <span class="num" style="${active ? `color:${c.text}` : ""}">${val}</span>
-        <span class="lbl" style="${active ? `color:${c.text}` : ""}">${lbl}</span>
-      </button>`;
-    }).join("")}</div>`;
-  }
-  if (q.type === "select") {
-    return q.options.map(opt => {
-      const active = state.answers[q.id] === opt;
-      return `<button class="select-btn ${active ? 'active' : ''}" onclick="setAnswer('${q.id}', '${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
-    }).join("");
-  }
-  if (q.type === "textarea") {
-    return `<textarea class="answer" rows="3" placeholder="${q.placeholder || 'Scrivi qui la tua risposta...'}" oninput="setAnswer('${q.id}', this.value)">${state.answers[q.id] || ""}</textarea>`;
-  }
-  return "";
-}
-
-function renderThankYou() {
-  app.innerHTML = `
-    <div class="thank-you">
-      <div style="max-width:500px;">
-        <div style="font-size:64px; margin-bottom:24px;">🎉</div>
-        <h1 style="font-family:'Playfair Display',serif; font-size:28px; font-weight:800; color:#4caf50; margin-bottom:16px;">Grazie ${state.name || ""}!</h1>
-        <p style="color:#aaa; font-size:16px; line-height:1.6;">Le tue risposte sono state inviate con successo. Ti ricontatterò presto per capire insieme come posso aiutarti nel tuo percorso.</p>
-        <div style="margin-top:32px; width:60px; height:3px; background:linear-gradient(90deg,#e8a838,#4caf50); border-radius:99px; margin:32px auto 0;"></div>
-      </div>
-    </div>`;
-}
-
-function setAnswer(id, val) { state.answers[id] = val; render(); }
-function startQuiz() { state.name = document.getElementById("nameInput").value; state.step = 0; render(); window.scrollTo(0, 0); }
-function nextStep() { state.step++; render(); window.scrollTo(0, 0); }
-function prevStep() { if (state.step > 0) state.step--; else state.step = -1; render(); window.scrollTo(0, 0); }
-
-function generateReport() {
-  let text = "";
-  SECTIONS.forEach(sec => {
-    text += sec.icon + " " + sec.title.toUpperCase() + "\n";
-    text += "--------------------------------------------\n";
-    sec.questions.forEach(q => {
-      const val = state.answers[q.id];
-      if (q.type === "scale") {
-        const filled = val || 0;
-        const bar = "#".repeat(filled) + ".".repeat(5 - filled);
-        const label = val ? SCALE_LABELS[val - 1] : "(nessuna risposta)";
-        text += q.text + "\n  [" + bar + "] " + (val || "-") + "/5 - " + label + "\n\n";
-      } else {
-        text += q.text + "\n  -> " + (val || "(nessuna risposta)") + "\n\n";
-      }
-    });
-    text += "\n";
-  });
-  return text;
-}
-
-async function sendResults() {
-  const btn = document.getElementById("sendBtn");
-  btn.textContent = "Invio in corso...";
-  btn.disabled = true;
-  btn.style.background = "#555";
-  btn.style.cursor = "wait";
-
-  try {
-    await emailjs.send(CONFIG.serviceId, CONFIG.templateId, {
-      section_title: "Studente - " + (state.name || "Anonimo"),
-      results: generateReport()
-    }, CONFIG.publicKey);
-    state.step = SECTIONS.length;
-    render();
-  } catch (e) {
-    console.error("EmailJS error:", e);
-    const toast = document.getElementById("errorToast");
-    toast.style.display = "block";
-    btn.textContent = "✓ Invia le risposte";
-    btn.disabled = false;
-    btn.style.background = "linear-gradient(135deg, #4caf50, #388e3c)";
-    btn.style.cursor = "pointer";
-    setTimeout(() => { toast.style.display = "none"; }, 4000);
-  }
-}
-
-render();
+rp();
 </script>
 </body>
 </html>
