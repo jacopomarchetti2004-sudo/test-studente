@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scopri il tuo percorso</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0f0f0f; color: #e8e8e8; font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+.container { max-width: 580px; margin: 0 auto; padding: 32px 24px; }
+.container.wizard { padding-bottom: 140px; }
+h1.gold { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 800; background: linear-gradient(135deg, #e8a838, #f0c060, #e8a838); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; line-height: 1.2; }
+h2.section-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; color: #f0f0f0; }
+.subtitle { color: #888; font-size: 15px; max-width: 420px; margin: 0 auto; line-height: 1.6; }
+.progress-wrap { width: 100%; background: rgba(255,255,255,0.08); border-radius: 99px; height: 6px; overflow: hidden; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, #e8a838, #f0c060); border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+.question-label { display: block; font-size: 15px; font-weight: 600; color: #ddd; margin-bottom: 10px; line-height: 1.4; }
+.scale-row { display: flex; gap: 6px; width: 100%; }
+.scale-btn { flex: 1; padding: 14px 4px 10px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; }
+.scale-btn .num { font-size: 22px; font-weight: 800; color: #555; font-family: 'DM Sans', sans-serif; }
+.scale-btn .lbl { font-size: 10px; color: #666; font-family: 'DM Sans', sans-serif; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.select-btn { display: block; width: 100%; padding: 12px 18px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #ccc; cursor: pointer; text-align: left; font-size: 15px; font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-bottom: 8px; }
+.select-btn.active { border: 2px solid #e8a838; background: rgba(232,168,56,0.15); color: #f0c060; }
+textarea.answer { width: 100%; padding: 16px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #e0e0e0; font-size: 15px; font-family: 'DM Sans', sans-serif; resize: vertical; outline: none; }
+textarea.answer:focus { border-color: #e8a838; }
+input.name-input { width: 100%; padding: 16px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #e0e0e0; font-size: 16px; font-family: 'DM Sans', sans-serif; outline: none; }
+input.name-input:focus { border-color: #e8a838; }
+.nav-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 16px 24px; background: linear-gradient(transparent, #0f0f0f 30%); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+.btn-back { padding: 14px 28px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: #ccc; cursor: pointer; font-size: 15px; font-weight: 600; font-family: 'DM Sans', sans-serif; }
+.btn-next { padding: 14px 32px; border-radius: 12px; border: none; background: linear-gradient(135deg, #e8a838, #d4922e); color: #fff; cursor: pointer; font-size: 15px; font-weight: 700; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 20px rgba(232,168,56,0.25); }
+.btn-send { padding: 14px 32px; border-radius: 12px; border: none; background: linear-gradient(135deg, #4caf50, #388e3c); color: #fff; cursor: pointer; font-size: 15px; font-weight: 700; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 20px rgba(76,175,80,0.3); }
+.btn-start { width: 100%; padding: 16px 32px; border-radius: 14px; border: none; background: linear-gradient(135deg, #e8a838, #d4922e); color: #0f0f0f; cursor: pointer; font-size: 16px; font-weight: 700; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 24px rgba(232,168,56,0.3); }
+.tag { padding: 8px 14px; border-radius: 99px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #999; font-size: 13px; display: inline-block; margin: 0 4px 8px 0; }
+.fade-in { animation: fadeUp 0.35s ease forwards; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.error-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(239,83,80,0.9); color: #fff; padding: 12px 24px; border-radius: 12px; font-size: 14px; z-index: 200; display: none; }
+.thank-you { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 32px; }
+.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+const CONFIG = {
+  serviceId: "service_333vq8h",
+  templateId: "template_14jkmvg",
+  publicKey: "Ho9TKfiAcFDFDgQhk"
+};
+
+const SCALE_LABELS = ["No", "Poco", "Così così", "Abbastanza", "Sì, molto"];
+const SCALE_COLORS = [
+  { bg: "rgba(239,83,80,0.15)", border: "#ef5350", text: "#ef5350" },
+  { bg: "rgba(255,167,38,0.15)", border: "#ffa726", text: "#ffa726" },
+  { bg: "rgba(255,238,88,0.12)", border: "#c9b458", text: "#c9b458" },
+  { bg: "rgba(102,187,106,0.15)", border: "#66bb6a", text: "#66bb6a" },
+  { bg: "rgba(76,175,80,0.2)", border: "#4caf50", text: "#4caf50" },
+];
+
+const SECTIONS = [
+  { title: "Chi sei", icon: "👤", questions: [
+    { id: "s1", text: "Quanti anni hai?", type: "select", options: ["14-17", "18-22", "23-27", "28-35", "36+"] },
+    { id: "s2", text: "Cosa fai nella vita?", type: "select", options: ["Studente", "Lavoratore dipendente", "Libero professionista", "Sportivo", "Disoccupato / in cerca"] },
+    { id: "s3", text: "Vivi ancora con la famiglia?", type: "scale" },
+    { id: "s4", text: "Hai già responsabilità economiche?", type: "scale" },
+    { id: "s5", text: "Stai cercando un'entrata extra?", type: "scale" },
+    { id: "s6", text: "Stai cercando una professione futura?", type: "scale" },
+    { id: "s7", text: "Stai cercando crescita personale?", type: "scale" },
+    { id: "s8", text: "Stai cercando indipendenza economica?", type: "scale" },
+  ]},
+  { title: "La tua situazione oggi", icon: "📍", questions: [
+    { id: "s9", text: "Sai gestire i tuoi soldi?", type: "scale" },
+    { id: "s10", text: "Hai già sentito parlare di trading?", type: "scale" },
+    { id: "s11", text: "Hai già provato a fare trading da solo?", type: "scale" },
+    { id: "s12", text: "Hai perso soldi in passato?", type: "scale" },
+    { id: "s13", text: "Ti senti confuso da troppe informazioni viste online?", type: "scale" },
+    { id: "s14", text: "Segui già qualche guru o formatore online?", type: "scale" },
+    { id: "s15", text: "Stai cercando una guida seria e affidabile?", type: "scale" },
+  ]},
+  { title: "Le tue difficoltà", icon: "🧱", questions: [
+    { id: "s16", text: "Hai paura di perdere soldi?", type: "scale" },
+    { id: "s17", text: "Fai fatica ad essere costante?", type: "scale" },
+    { id: "s18", text: "Ti fai prendere dalle emozioni?", type: "scale" },
+    { id: "s19", text: "Cerchi guadagni veloci?", type: "scale" },
+    { id: "s20", text: "Senti di non avere un metodo?", type: "scale" },
+    { id: "s21", text: "Non sai da dove iniziare?", type: "scale" },
+    { id: "s22", text: "Ti senti solo e senza guida?", type: "scale" },
+    { id: "s23", text: "Ti senti bloccato mentalmente?", type: "scale" },
+    { id: "s24", text: "Hai poca fiducia in te stesso?", type: "scale" },
+    { id: "s25", text: "C'è qualcos'altro che ti blocca?", type: "textarea" },
+  ]},
+  { title: "I tuoi desideri", icon: "🔥", questions: [
+    { id: "s26", text: "Vuoi libertà economica?", type: "scale" },
+    { id: "s27", text: "Vuoi non dipendere da un lavoro fisso?", type: "scale" },
+    { id: "s28", text: "Vuoi sentirti più sicuro e capace?", type: "scale" },
+    { id: "s29", text: "Vuoi costruire una competenza vera?", type: "scale" },
+    { id: "s30", text: "Vuoi aiutare la tua famiglia?", type: "scale" },
+    { id: "s31", text: "Vuoi dimostrare qualcosa a te stesso?", type: "scale" },
+    { id: "s32", text: "Vuoi creare una nuova versione di te?", type: "scale" },
+    { id: "s33", text: "Vuoi imparare disciplina e autocontrollo?", type: "scale" },
+    { id: "s34", text: "Se potessi descrivere la vita che vuoi tra 1 anno, come sarebbe?", type: "textarea" },
+  ]},
+  { title: "I tuoi obiettivi", icon: "🎯", questions: [
+    { id: "s35", text: "Vuoi capire le basi del trading nei prossimi 3 mesi?", type: "scale" },
+    { id: "s36", text: "Vuoi costruire una routine di studio?", type: "scale" },
+    { id: "s37", text: "Vuoi imparare a leggere il mercato?", type: "scale" },
+    { id: "s38", text: "Vuoi arrivare a fare trading in autonomia?", type: "scale" },
+    { id: "s39", text: "Vuoi prima lavorare sulla mentalità?", type: "scale" },
+    { id: "s40", text: "Vuoi partire subito con la tecnica?", type: "scale" },
+    { id: "s41", text: "Quanto tempo puoi dedicare ogni giorno?", type: "select", options: ["Meno di 30 minuti", "30 minuti - 1 ora", "1-2 ore", "Più di 2 ore"] },
+  ]},
+  { title: "Quanto sei consapevole", icon: "🧠", questions: [
+    { id: "s42", text: "Sai davvero cosa significa fare trading?", type: "scale" },
+    { id: "s43", text: "Hai capito che non è un gioco?", type: "scale" },
+    { id: "s44", text: "Sei disposto a studiare seriamente?", type: "scale" },
+    { id: "s45", text: "Sei pronto a lavorare su te stesso, non solo sui grafici?", type: "scale" },
+    { id: "s46", text: "Accetti che servano disciplina e pazienza?", type: "scale" },
+    { id: "s47", text: "Cerchi un percorso vero, non scorciatoie?", type: "scale" },
+    { id: "s48", text: "Sei pronto a imparare anche dai tuoi errori?", type: "scale" },
+  ]},
+  { title: "Il tuo carattere", icon: "💎", questions: [
+    { id: "s49", text: "Sei una persona calma e riflessiva?", type: "scale" },
+    { id: "s50", text: "Sei impulsivo, agisci di pancia?", type: "scale" },
+    { id: "s51", text: "Sei costante quando inizi qualcosa?", type: "scale" },
+    { id: "s52", text: "Hai bisogno di essere motivato spesso?", type: "scale" },
+    { id: "s53", text: "Sei competitivo?", type: "scale" },
+    { id: "s54", text: "Ti scoraggi facilmente?", type: "scale" },
+    { id: "s55", text: "Reagisci bene alle regole?", type: "scale" },
+    { id: "s56", text: "Come impari meglio?", type: "select", options: ["Con la teoria e lo studio", "Con la pratica diretta", "Con esempi concreti e storie vere", "Un mix di tutto"] },
+    { id: "s57", text: "Di che tipo di guida hai bisogno?", type: "select", options: ["Una guida forte con regole precise", "Un accompagnamento gentile e paziente", "Qualcuno che mi motivi e mi spinga", "Qualcuno che mi capisca emotivamente"] },
+  ]},
+  { title: "Le tue paure", icon: "😰", questions: [
+    { id: "s58", text: "Hai paura di fallire?", type: "scale" },
+    { id: "s59", text: "Hai paura del giudizio degli altri?", type: "scale" },
+    { id: "s60", text: "Hai paura di non essere abbastanza intelligente?", type: "scale" },
+    { id: "s61", text: "Hai paura di perdere tempo?", type: "scale" },
+    { id: "s62", text: "Hai paura di perdere soldi e sentirti stupido?", type: "scale" },
+    { id: "s63", text: "Hai paura di impegnarti e poi mollare?", type: "scale" },
+    { id: "s64", text: "Hai paura del cambiamento?", type: "scale" },
+    { id: "s65", text: "Hai paura di diventare davvero indipendente?", type: "scale" },
+    { id: "s66", text: "C'è una paura che non hai mai detto a nessuno?", type: "textarea", placeholder: "Se vuoi, scrivila qui..." },
+  ]},
+  { title: "Ostacoli pratici", icon: "⚡", questions: [
+    { id: "s67", text: "Hai poco tempo?", type: "scale" },
+    { id: "s68", text: "Hai poca concentrazione?", type: "scale" },
+    { id: "s69", text: "Hai un budget limitato?", type: "scale" },
+    { id: "s70", text: "Hai persone intorno che ti scoraggiano?", type: "scale" },
+    { id: "s71", text: "Usi troppo i social e ti distrai facilmente?", type: "scale" },
+    { id: "s72", text: "Ti manca una routine quotidiana?", type: "scale" },
+    { id: "s73", text: "Ti manca pazienza?", type: "scale" },
+    { id: "s74", text: "Ti manca autocontrollo?", type: "scale" },
+  ]},
+  { title: "Cosa cerchi in un mentore", icon: "🧭", questions: [
+    { id: "s75", text: "Vuoi qualcuno che ti motivi?", type: "scale" },
+    { id: "s76", text: "Vuoi qualcuno che ti dia regole precise?", type: "scale" },
+    { id: "s77", text: "Vuoi qualcuno che ti capisca anche emotivamente?", type: "scale" },
+    { id: "s78", text: "Cerchi un esempio da seguire?", type: "scale" },
+    { id: "s79", text: "Cerchi credibilità e autenticità?", type: "scale" },
+    { id: "s80", text: "Cerchi semplicità nelle spiegazioni?", type: "scale" },
+    { id: "s81", text: "Cerchi una persona vera, non costruita?", type: "scale" },
+    { id: "s82", text: "Cerchi qualcuno che unisca tecnica e mentalità?", type: "scale" },
+  ]},
+];
+
+let state = { step: -1, answers: {}, name: "" };
+const app = document.getElementById("app");
+
+function render() {
+  if (state.step === -1) renderIntro();
+  else if (state.step === SECTIONS.length) renderThankYou();
+  else renderWizard();
+}
+
+function renderIntro() {
+  let tags = SECTIONS.map(s => `<span class="tag">${s.icon} ${s.title}</span>`).join("");
+  app.innerHTML = `
+    <div class="container" style="text-align:center; padding-top:56px;">
+      <div style="font-size:48px; margin-bottom:16px;">📝</div>
+      <h1 class="gold">Scopri il tuo percorso</h1>
+      <p class="subtitle">Rispondi a queste domande per aiutarmi a capire chi sei, dove vuoi arrivare e come posso guidarti al meglio. Ci vogliono circa 5 minuti.</p>
+      <div style="margin:32px 0; text-align:left;">
+        <label class="question-label">Come ti chiami?</label>
+        <input type="text" class="name-input" id="nameInput" placeholder="Il tuo nome..." value="${state.name}">
+      </div>
+      <div style="text-align:left; margin-bottom:32px;">${tags}</div>
+      <button class="btn-start" onclick="startQuiz()">Inizia →</button>
+    </div>`;
+}
+
+function renderWizard() {
+  const sec = SECTIONS[state.step];
+  const isLast = state.step === SECTIONS.length - 1;
+  let qs = sec.questions.map(q => `
+    <div style="margin-bottom:24px;">
+      <label class="question-label">${q.text}</label>
+      ${renderQuestion(q)}
+    </div>`).join("");
+
+  app.innerHTML = `
+    <div class="container wizard">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="color:#666; font-size:13px;">📝 ${state.name || "Studente"}</span>
+        <span style="color:#666; font-size:13px;">${state.step + 1}/${SECTIONS.length}</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${((state.step + 1) / SECTIONS.length) * 100}%"></div></div>
+      <div class="fade-in" style="margin-top:32px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
+          <span style="font-size:32px;">${sec.icon}</span>
+          <h2 class="section-title">${sec.title}</h2>
+        </div>
+        ${qs}
+      </div>
+      <div class="nav-bar">
+        <button class="btn-back" onclick="prevStep()">← Indietro</button>
+        ${isLast
+          ? `<button class="btn-send" id="sendBtn" onclick="sendResults()">✓ Invia le risposte</button>`
+          : `<button class="btn-next" onclick="nextStep()">Avanti →</button>`}
+      </div>
+      <div class="error-toast" id="errorToast">Errore nell'invio. Riprova tra qualche secondo.</div>
+    </div>`;
+}
+
+function renderQuestion(q) {
+  if (q.type === "scale") {
+    return `<div class="scale-row">${SCALE_LABELS.map((lbl, i) => {
+      const val = i + 1;
+      const active = state.answers[q.id] === val;
+      const c = SCALE_COLORS[i];
+      return `<button class="scale-btn" style="${active ? `border:2.5px solid ${c.border}; background:${c.bg};` : ""}" onclick="setAnswer('${q.id}', ${val})">
+        <span class="num" style="${active ? `color:${c.text}` : ""}">${val}</span>
+        <span class="lbl" style="${active ? `color:${c.text}` : ""}">${lbl}</span>
+      </button>`;
+    }).join("")}</div>`;
+  }
+  if (q.type === "select") {
+    return q.options.map(opt => {
+      const active = state.answers[q.id] === opt;
+      return `<button class="select-btn ${active ? 'active' : ''}" onclick="setAnswer('${q.id}', '${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
+    }).join("");
+  }
+  if (q.type === "textarea") {
+    return `<textarea class="answer" rows="3" placeholder="${q.placeholder || 'Scrivi qui la tua risposta...'}" oninput="setAnswer('${q.id}', this.value)">${state.answers[q.id] || ""}</textarea>`;
+  }
+  return "";
+}
+
+function renderThankYou() {
+  app.innerHTML = `
+    <div class="thank-you">
+      <div style="max-width:500px;">
+        <div style="font-size:64px; margin-bottom:24px;">🎉</div>
+        <h1 style="font-family:'Playfair Display',serif; font-size:28px; font-weight:800; color:#4caf50; margin-bottom:16px;">Grazie ${state.name || ""}!</h1>
+        <p style="color:#aaa; font-size:16px; line-height:1.6;">Le tue risposte sono state inviate con successo. Ti ricontatterò presto per capire insieme come posso aiutarti nel tuo percorso.</p>
+        <div style="margin-top:32px; width:60px; height:3px; background:linear-gradient(90deg,#e8a838,#4caf50); border-radius:99px; margin:32px auto 0;"></div>
+      </div>
+    </div>`;
+}
+
+function setAnswer(id, val) { state.answers[id] = val; render(); }
+function startQuiz() { state.name = document.getElementById("nameInput").value; state.step = 0; render(); window.scrollTo(0, 0); }
+function nextStep() { state.step++; render(); window.scrollTo(0, 0); }
+function prevStep() { if (state.step > 0) state.step--; else state.step = -1; render(); window.scrollTo(0, 0); }
+
+function generateReport() {
+  let text = "";
+  SECTIONS.forEach(sec => {
+    text += sec.icon + " " + sec.title.toUpperCase() + "\n";
+    text += "--------------------------------------------\n";
+    sec.questions.forEach(q => {
+      const val = state.answers[q.id];
+      if (q.type === "scale") {
+        const filled = val || 0;
+        const bar = "#".repeat(filled) + ".".repeat(5 - filled);
+        const label = val ? SCALE_LABELS[val - 1] : "(nessuna risposta)";
+        text += q.text + "\n  [" + bar + "] " + (val || "-") + "/5 - " + label + "\n\n";
+      } else {
+        text += q.text + "\n  -> " + (val || "(nessuna risposta)") + "\n\n";
+      }
+    });
+    text += "\n";
+  });
+  return text;
+}
+
+async function sendResults() {
+  const btn = document.getElementById("sendBtn");
+  btn.textContent = "Invio in corso...";
+  btn.disabled = true;
+  btn.style.background = "#555";
+  btn.style.cursor = "wait";
+
+  try {
+    await emailjs.send(CONFIG.serviceId, CONFIG.templateId, {
+      section_title: "Studente - " + (state.name || "Anonimo"),
+      results: generateReport()
+    }, CONFIG.publicKey);
+    state.step = SECTIONS.length;
+    render();
+  } catch (e) {
+    console.error("EmailJS error:", e);
+    const toast = document.getElementById("errorToast");
+    toast.style.display = "block";
+    btn.textContent = "✓ Invia le risposte";
+    btn.disabled = false;
+    btn.style.background = "linear-gradient(135deg, #4caf50, #388e3c)";
+    btn.style.cursor = "pointer";
+    setTimeout(() => { toast.style.display = "none"; }, 4000);
+  }
+}
+
+render();
+</script>
+</body>
+</html>
